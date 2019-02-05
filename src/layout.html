@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="./style.css">
+  
+</head>
+<body>
+  
+  <div class="root">
+   <div class="container">
+     <div class="header">Calculator</div>
+     <div class="display">
+      <input class='display_main' type="text" placeholder="0" readonly maxlength="10">
+      <input class='display_operator' type="text" placeholder="0" readonly maxlength="10">
+     </div>
+     <div class="control_memory">
+      <div class="MC">MC</div>
+      <div class="MR">MR</div>
+      <div class="M+">M+</div>
+      <div class="M-">M-</div>
+      <div class="MS">MS</div>
+      <div class="M" >M </div>
+     </div>
+     <div class="keypad">
+       <div class="keypad__special">
+          <div class="key">%</div>
+          <div class="key">&#8730;  </div>
+          <div class="key">x&sup2;  </div>
+          <div class="key">1&#8260;x</div>
+          <div class="key CE">CE</div>
+          <div class="key C">C</div>
+          <div class="key backspace">&#8592;</div>
+          <div class="key">&divide;</div>
+       </div>
+        
+       <div class="keypad__main">
+         <div class="keypad__number">
+            <div class="key">7</div>
+            <div class="key">8</div>
+            <div class="key">9</div>
+            <div class="key">4</div>
+            <div class="key">5</div>
+            <div class="key">6</div>
+            <div class="key">1</div>
+            <div class="key">2</div>
+            <div class="key">3</div>
+            <div class="key">&#177;</div>
+            <div class="key">0</div>
+            <div class="key">,</div>
+         </div>
+         <div class="keypad__operator">
+            <!-- <div class="key">&#215;</div> -->
+            <div class="key">x</div>
+            <div class="key">&#8722;</div>
+            <div class="key">+</div>
+            <div class="result_key">=</div>
+         </div>
+       </div>
+
+      
+      
+      
+     </div>
+   </div>
+  </div>
+  <script src="./Display.js"></script>
+  <script src="./Memory.js"></script>
+  <script src="./Calculator.js"></script>
+  <script src="./index.js"></script>
+</body>
+</html>
