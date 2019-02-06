@@ -1,96 +1,113 @@
 class Calculator {
   constructor( display, memory ) {
-    this.display = display;
-    this.memory = memory;
+    this._display = display;
+    this._memory = memory;
     this.dispatcher = {
-      MC: this.memory.memoryClear,
-      MR: this.memory.memoryRead,
-      MS: this.memory.memorySave
+      MC: this._memory.memoryClear,
+      MR: this._memory.memoryRead,
+      MS: this._memory.memorySave
     }
     this._state = {
-      operator: false
+      operatorIsEnter: false,
+      resultIsGet: false
     }
-    this.init();
+    this._init();
   }
 
   getResult() {
-    this.memory.getResult(this.display.showValue.bind(this.display));
+    let result = this._memory.getResult(this._display.showResult.bind(this._display));
+    
+    this._display.addCharToExp(result);
+
+    this._state.resultIsGet = true;
+    this._memory.reset();
   }
 
   isPair(operator) {
-    return this.memory.isPair(operator)
+    return this._memory.isPair(operator)
   }
 
   addValueToExpression(operator, done) {
-    this.memory.addValueToExpression(operator, done)
+    this._memory.addValueToExpression(operator, done)
   }
-
-  backspace(done) {
-    this.memory.backspace(done);
+  backspace() {
+    if (this._display.currentMain) {
+      this.addValueToExpression(this._display.currentMain, this._display.clearMainDisplay.bind(this._display))
+    }
+    this._memory.backspace(this._display.backspace.bind(this._display));
   }
-
+  removeLastChar(done) {
+    this._memory.removeLastValueInExpression(done);
+  }
   clearCurrentValue(done) {
-    this.memory.removeLastValueInExpression(done);
+    this._memory.removeLastValueInExpression(this._display.clearMainDisplay.bind(this._display));
+    this._display.clearExpressionDisplay();
   } 
 
+  //Обработчики событий
   handleMemoryKeysClick({ target }) {
-    this.dispatcher[target.className](this.display.getCurrentValue());
+    this.dispatcher[target.className](this._display.getCurrentValue());
   }
-
   handleSpecialKeysClick({ target }) {
     if ( this._clearKey(target) ) {
-      this.clearCurrentValue(this.display.clearCurrentValue.bind(this.display));
+      this.clearCurrentValue();
       return false
     };
     if ( this._fullClearKey(target) ) {
-      this.memory.reset(this.display.fullClear.bind(this.display));
+      this._memory.reset(this._display.reset.bind(this._display));
+      this._state.operatorIsEnter = false;
       return false
     };
     if ( this._backspaceKey(target) ) {
-      this.memory.backspace(this.display.backspace.bind(this.display))
+      this.backspace();
     };
   }
-
   handleNumericKeysClick({ target }) {
     if ( this._isKey(target) ) return false;
-
-    if(this._state.operator ) {
-      this.display.clearValueDisplay ();
+    
+    if ( this._state.operatorIsEnter ) {
+      this._display.clearMainDisplay();
+      this._state.operatorIsEnter = false;
     }
-    this._state.operator = false;
-    this.display.addCharToLine(target.textContent);
-    this.display.showExpression(target.textContent);
-  }
 
+    this._display.addCharToMain(target.textContent);
+    this._display.addCharToExp(target.textContent);
+    this._state.operatorIsEnter = false;
+  }
   handleOperatorKeysClick({ target }) {
     if ( this._isKey(target) ) return false;
-    
-    if( !this._state.operator ) {
-      this.addValueToExpression(this.display.currentValue);
+  
+    if( !this._state.operatorIsEnter) {
+      this.addValueToExpression(this._display.currentMain);
     } else {
-      this.backspace(this.display.backspace.bind(this.display));
+      this.removeLastChar(this._display.removeLastCharExp.bind(this._display));
     }
-    this._toggleState();    
+
+    this._state.operatorIsEnter = true;
+    this._display.clearMainDisplay();
+    this._display.addCharToMain(target.textContent);
 
     this.addValueToExpression(
       target.dataset.operator, 
-      this.display.showExpression.call(
-        this.display, 
+      this._display.addCharToExp.call(
+        this._display, 
         target.textContent
         ));
 
-    if ( !this.isPair(target.dataset.operator) ) {
+    if ( !this.isPair(target.dataset.operator) && this._memory.expression[0] !== '' && this._memory.expression[0] !== "0") {
       this.getResult();
-      this._toggleState();
+      this._state.operatorIsEnter = true;
+    } else if (!this.isPair(target.dataset.operator)) {
+      this._display.currentMain = 'div of 0'
     }
+    
   }
-
   handleResultKeyClick() {
-    this.addValueToExpression(this.display.currentValue, this.display.clearValueDisplay.bind(this.display))
+    this.addValueToExpression(this._display.currentMain, this._display.clearMainDisplay.bind(this._display))
     this.getResult();
   }
 
-  init() {
+  _init() {
     const memoryKeys = document.querySelector('.control_memory');
     const numericKeys = document.querySelector('.keypad__number');
     const operatorKeys = document.querySelectorAll('.operators');
@@ -108,9 +125,6 @@ class Calculator {
     resultKey.addEventListener( 'click', this.handleResultKeyClick.bind(this));
 
 
-  }
-  _toggleState() {
-    this._state.operator = !this._state.operator;
   }
 
   _isKey(button) {

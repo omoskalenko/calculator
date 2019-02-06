@@ -1,69 +1,76 @@
 class Display {
   constructor(value) {
+<<<<<<< HEAD
     this.valueDisplay = document.querySelector('.display_main');
     this.expressionDisplay = document.querySelector('.display_expression');
+=======
+    this.mainDisplay = document.querySelector('.display_main');
+    this.expressionDisplay = document.querySelector('.display_operator');
+>>>>>>> mvc
   }
-  get currentValue() {    
-    return this.valueDisplay.value;
+  get currentMain() {    
+    return this.mainDisplay.value;
   }
-
-  set currentValue(value) {
-    this.valueDisplay.value = value
+  set currentMain(value) {
+    this.mainDisplay.value = value
   }
-
   get currentExpression() {        
     return this.expressionDisplay.value;
   }
-
-  set currentExpression(operator) {    
-    this.expressionDisplay.value = operator;
+  set currentExpression(value) {    
+    this.expressionDisplay.value = value;
   }
-
-  showValue(value) {    
-    this.currentValue = value;
-    this.currentExpression = '';
-    // this.showExpression(value)
+  showResult(result) {    
+    this.currentMain = result;
+    this.clearExpressionDisplay();
   }
-
-  addCharToLine(content) {
-    if (this.valueDisplay.value.length < 9) {
-      this.valueDisplay.value += content;
-    }
-    
+  addCharToMain(content) {
+    if (this.mainDisplay.value.length < 9) {
+      this.mainDisplay.value += content;
+    }    
   }
-
-  showExpression(value) {    
+  addCharToExp(value) {    
       this.currentExpression += value;
+      console.log('DISPLAY: Добавлен символ на экран выражения, новое значение', this.currentExpression);
   }
-  toggleSignCurrentValue(value) {
-    this.showValue(value);
-  }
-
-  clearCurrentValue() {
-    this.expressionDisplay.value = this.expressionDisplay.value.slice(0, this.expressionDisplay.value.length - this.valueDisplay.value.length)
-    this.valueDisplay.value = '';
-    
-  }
-
-  clearValueDisplay() {
-    this.valueDisplay.value = '';
-  }
-
-  fullClear() {
-    this.valueDisplay.value = '';
-    this.expressionDisplay.value = '';
-  }
-
-  backspace() {  
-    let value = this.currentValue;
-    let expression = this.currentExpression;
-
-    // if ( value.length < 1) return false;
-    this.currentValue = value.slice(0, value.length - 1);
-    this.currentExpression = expression.slice(0, expression.length - 1);
+  removeLastCharMain() {
+    let value = this.currentMain;
+    this.currentMain = value.slice(0, value.length - 1);
+    console.log('DISPLAY: удален последний символ на основном экране');
     return true;
   }
-
+  removeLastCharExp() {  
+    let value =  this.currentExpression;
+    // this.expressionDisplay.value = '';
+    this.expressionDisplay.value = value.slice(0, value.length - 1)
+    
+    console.log(`DISPLAY: удален последний символ на экране выражения, новое значение ${this.currentExpression}`);
+    console.log(this.currentExpression);
+    
+    return true;
+  }
+  getLastCharExp() {
+    let expression = this.currentExpression;
+    let lastChar = expression[expression.length - 1];
+    return true;
+  }
+  clearMainDisplay() {
+    this.currentMain = '';
+  }
+  clearExpressionDisplay() {
+    this.currentExpression = '';
+  }
+  //ОБЩИЕ
+  reset() {
+    this.clearMainDisplay();
+    this.clearExpressionDisplay();
+  }
+  backspace() {  
+    this.removeLastCharMain();
+    this.removeLastCharExp();
+    return true;
+  }
+  
   _isNumber(value) {
     console.log(typeof value);
     
