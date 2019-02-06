@@ -1,12 +1,7 @@
 class Display {
   constructor(value) {
-<<<<<<< HEAD
-    this.valueDisplay = document.querySelector('.display_main');
-    this.expressionDisplay = document.querySelector('.display_expression');
-=======
     this.mainDisplay = document.querySelector('.display_main');
-    this.expressionDisplay = document.querySelector('.display_operator');
->>>>>>> mvc
+    this.expressionDisplay = document.querySelector('.display_expression');
   }
   get currentMain() {    
     return this.mainDisplay.value;
