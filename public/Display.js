@@ -1,7 +1,7 @@
 class Display {
   constructor(value) {
     this.valueDisplay = document.querySelector('.display_main');
-    this.expressionDisplay = document.querySelector('.display_operator');
+    this.expressionDisplay = document.querySelector('.display_expression');
   }
   get currentValue() {    
     return this.valueDisplay.value;

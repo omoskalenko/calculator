@@ -209,7 +209,7 @@ table {
   font-family: Tahoma; 
   text-align:right
 }
-.display_operator {
+.display_expression {
   box-sizing:border-box;
   border: 0px solid #cccccc; 
   background:  inherit !important; 
