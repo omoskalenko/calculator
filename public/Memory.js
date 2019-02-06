@@ -119,15 +119,17 @@
 
     getResult(done) {
       console.log('".getResult": Производится вычисление выражения',this.expression);
-      
+
       this.result  = this.calculate(this.expression, 0);
+      if (this.result === 'Infinity') {
+        this.result = 'div of 0'
+      }
       
       if( done ) done(this.result); 
 
       console.log(`".getResult": вычисление выражения  ${this.expression.join('')} произведено, результат: ${this.result}`);
-
-      this.reset();
-     
+      return this.result;
+      // this.reset();
     }
 
     calculate(expression, indexOperator) {
@@ -170,6 +172,7 @@
       this.expression = this.expression.slice(0, this.expression.length - 1);
       if (done) done();
       console.log('".removeLastValueInExpression": удалено последнее введенное значение',this.expression);
+
     }
 
     backspace(done) {
